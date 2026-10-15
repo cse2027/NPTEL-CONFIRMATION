@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NPTEL Course Confirmation – IV CSE-A</title>
+  <meta name="description" content="NPTEL course confirmation form for IV CSE-A students." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo-area">
+        <div>
+          <div class="logo-title">NPTEL Confirmation Portal</div>
+          <div class="logo-sub"> CSE-A </div>
+          <a class="admin-link" href="admin.html">Admin portal</a>
+        </div>
+      </div>
+      <div class="header-count-badge" id="headerCountBadge" title="Submissions so far">
+        <span class="hcb-num" id="headerSubmittedCount">0</span>
+        <span class="hcb-lbl">submitted</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Panel -->
+  <main class="main-container">
+
+    <!-- Confirmation Form Card -->
+    <div class="form-card">
+      <div class="form-header">
+        <h1 class="form-title">NPTEL Course Confirmation</h1>
+      </div>
+
+      <form id="confirmationForm" novalidate>
+
+        <!-- Roll Number -->
+        <div class="field-group">
+          <label class="field-label" for="rollInput">Roll Number <span class="required">*</span></label>
+          <input
+            type="text"
+            id="rollInput"
+            name="rollNumber"
+            class="input-field"
+            placeholder="Enter your roll number"
+            autocomplete="off"
+            spellcheck="false"
+            required
+            aria-required="true"
+          />
+          <div class="roll-error" id="rollError" aria-live="polite"></div>
+          <div class="roll-status" id="rollStatus" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="field-group" id="studentNameGroup" hidden>
+          <label class="field-label" for="studentName">Student Name</label>
+          <input type="text" id="studentName" class="input-field readonly" readonly aria-readonly="true" />
+        </div>
+
+        <!-- 4-1 Course Notification -->
+        <div class="course41-banner" id="course41Banner" style="display:none;" role="note">
+          <div>
+            <strong>4-1 Semester Course Registered</strong>
+            <span id="course41Name"></span>
+          </div>
+        </div>
+
+        <!-- NPTEL Courses -->
+        <div class="field-group" id="coursesSection" style="display:none;">
+          <label class="field-label"> Select <b>NPTEL Courses</b> with Highest Percentage</label>
+          <div class="courses-grid" id="coursesGrid" role="group" aria-label="NPTEL courses"></div>
+          <div class="no-courses-msg" id="noCoursesMsg" style="display:none;">
+            No NPTEL courses found for this roll number.
+          </div>
+        </div>
+
+        <!-- Confirmed courses summary -->
+        <div class="field-group" id="courseNameGroup" style="display:none;">
+          <label class="field-label" for="courseName">Confirmed Course(s)</label>
+          <textarea
+            id="courseName"
+            name="courseName"
+            class="input-field readonly"
+            rows="2"
+            readonly
+            aria-readonly="true"
+          ></textarea>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-actions">
+          <p class="course-exclusion-note" id="courseExclusionNote" hidden>Programming in Java and Joy of Computing using Python are excluded because they are part of the regular academic curriculum.</p>
+          <button type="submit" class="btn-submit" id="submitBtn" disabled>
+            <span class="btn-text">Submit Confirmation</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </div>
+
+        <!-- Status -->
+        <div class="status-msg" id="statusMsg" role="alert" aria-live="polite"></div>
+
+      </form>
+    </div>
+
+
+
+  </main>
+
+  <dialog class="success-dialog" id="successDialog" aria-labelledby="successTitle" aria-describedby="successMessage">
+    <div class="success-card">
+      <div class="success-mark" aria-hidden="true">✓</div>
+      <h2 class="success-title" id="successTitle">Submission received</h2>
+      <p class="success-message" id="successMessage"></p>
+      <button class="btn-submit success-close" type="button" id="successCloseButton">Continue</button>
+    </div>
+  </dialog>
+
+  <!-- Load config FIRST (acts as .env) -->
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+.admin-container {
+  width: min(1100px, 100%);
+  margin: 40px auto;
+  padding: 0 20px;
+  flex: 1;
+}
+
+.login-card { max-width: 480px; margin: 0 auto; }
+.login-card form { padding-top: 24px; }
+.login-card .btn-submit { width: 100%; }
+.admin-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.submission-summary {
+  margin-top: 7px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.btn-secondary {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  background: #fff;
+  color: var(--text-primary);
+  font: 600 13px var(--font-main);
+  cursor: pointer;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+
+.btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.table-scroll { overflow-x: auto; }
+
+.submissions-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.submissions-table th,
+.submissions-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.submissions-table th {
+  background: #f8f9ff;
+  color: var(--text-secondary);
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.submissions-table td { overflow-wrap: anywhere; }
+.empty-state { padding: 24px; text-align: center; color: var(--text-secondary); }
+.submissions-panel > .status-msg { margin: 0 24px 20px; }
+
+@media (max-width: 600px) {
+  .admin-container { margin: 24px auto; padding: 0 12px; }
+  .admin-panel-header { align-items: flex-start; }
+  .admin-actions { padding: 14px 16px; }
+  .submissions-table th,
+  .submissions-table td { padding: 10px; }
+}
+
+@media print {
+  body { display: block; background: #fff; }
+  .header,
+  #loginPanel,
+  .admin-actions,
+  #signOutButton,
+  #dataMessage { display: none !important; }
+  .admin-container { width: 100%; max-width: none; margin: 0; padding: 0; }
+  .submissions-panel { border: 0; box-shadow: none; overflow: visible; }
+  .admin-panel-header { padding: 0 0 12px; border: 0; background: #fff; }
+  .table-scroll { overflow: visible; }
+  .submissions-table { font-size: 10px; }
+  .submissions-table thead { display: table-header-group; }
+  .submissions-table tr { break-inside: avoid; }
+  .submissions-table th,
+  .submissions-table td { padding: 6px; }
+}

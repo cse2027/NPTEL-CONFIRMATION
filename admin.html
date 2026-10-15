@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Portal – NPTEL Confirmation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo-area">
+        <div>
+          <div class="logo-title">NPTEL Admin Portal</div>
+          <div class="logo-sub"><a class="admin-link" href="index.html">Back to confirmation form</a></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <section class="form-card login-card" id="loginPanel">
+      <div class="form-header">
+        <h1 class="form-title">Admin sign in</h1>
+      </div>
+      <form id="loginForm" novalidate>
+        <div class="field-group">
+          <label class="field-label" for="username">Username</label>
+          <input class="input-field" type="text" id="username" autocomplete="username" required />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="password">Password</label>
+          <input class="input-field" type="password" id="password" autocomplete="current-password" required />
+        </div>
+        <button class="btn-submit" type="submit" id="loginButton">Sign in</button>
+        <div class="status-msg" id="loginMessage" role="alert" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section class="form-card submissions-panel" id="submissionsPanel" hidden>
+      <div class="form-header admin-panel-header">
+        <div>
+          <h1 class="form-title">Submitted confirmations</h1>
+          <p class="submission-summary" id="submissionSummary" aria-live="polite"></p>
+        </div>
+        <button class="btn-secondary" type="button" id="signOutButton">Sign out</button>
+      </div>
+      <div class="admin-actions">
+        <button class="btn-secondary" type="button" id="downloadButton" disabled>Download Excel workbook</button>
+        <button class="btn-secondary" type="button" id="printButton" disabled>Print / Save as PDF</button>
+      </div>
+      <div class="table-scroll">
+        <table class="submissions-table">
+          <thead>
+            <tr>
+              <th scope="col">Roll number</th>
+              <th scope="col">Student name</th>
+              <th scope="col">Confirmed courses</th>
+              <th scope="col">4-1 course</th>
+              <th scope="col">Submitted at</th>
+            </tr>
+          </thead>
+          <tbody id="submissionsBody"></tbody>
+        </table>
+        <p class="empty-state" id="emptyState" hidden>No confirmations have been submitted yet.</p>
+      </div>
+      <div class="status-msg" id="dataMessage" role="alert" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
