@@ -53,7 +53,7 @@ const STUDENTS = [
   { roll: "23BQ1A0533", name: "Manogna B", courses: ["Software Testing", "The joy of computing with python"], course41: "" },
   { roll: "23BQ1A0534", name: "Boligarla Nagendrababu", courses: ["Programming in Java", "Programming in modern c++"], course41: "" },
   { roll: "23BQ1A0535", name: "Bolla Jahnavi", courses: ["PROGRAMMING IN JAVA", "CLOUD COMPUTING"], course41: "" },
-  { roll: "23BQA10536", name: "B.SaiBalaji", courses: ["Programming In Java"], course41: "" },
+  { roll: "23BQ1A0536", name: "B.SaiBalaji", courses: ["Programming In Java"], course41: "" },
   { roll: "23BQ1A0537", name: "BURGULA AJAY KUMAR", courses: ["Programming in Modern C++"], course41: "" },
   { roll: "23BQ1A0538", name: "Ch. Nandu", courses: ["INTRODUCTION TO LARGE LANGUAGE MODELS"], course41: "Social networking" },
   { roll: "23BQ1A0539", name: "Uma Chandra", courses: ["Cyber Security and Privacy", "Introduction to Large Language Models (LLMs)"], course41: "Software Testing" },
