@@ -42,7 +42,7 @@ async function fetchAllSubmissions() {
 
   for (let offset = 0; ; offset += pageSize) {
     const url = new URL(`/rest/v1/${encodeURIComponent(ADMIN_CONFIG.table)}`, ADMIN_CONFIG.url);
-    url.searchParams.set("select", "roll_number,student_name,confirmed_courses,course_41,submitted_at");
+    url.searchParams.set("select", "section,roll_number,student_name,confirmed_courses,course_41,submitted_at");
     url.searchParams.set("order", "submitted_at.desc");
 
     const response = await fetch(url, {
@@ -71,6 +71,7 @@ function renderSubmissions(rows) {
       ? new Date(submission.submitted_at).toLocaleString()
       : "";
     [
+      submission.section,
       submission.roll_number,
       submission.student_name,
       submission.confirmed_courses,
@@ -119,8 +120,9 @@ function excelCell(value) {
 }
 
 function downloadExcelWorkbook() {
-  const headings = ["Roll number", "Student name", "Confirmed courses", "4-1 course", "Submitted at"];
+  const headings = ["Section", "Roll number", "Student name", "Confirmed courses", "4-1 course", "Submitted at"];
   const records = submissions.map((row) => [
+    row.section,
     row.roll_number,
     row.student_name,
     row.confirmed_courses,

@@ -90,21 +90,82 @@ const STUDENTS = [
   { roll: "24bq5a0508", name: "Kodali Sanjay", courses: [], course41: "Cybersecurity and privacy" },
 ];
 
-const TOTAL_STUDENTS = STUDENTS.length;
+const STUDENTS_BY_SECTION = {
+  "CSE-A": STUDENTS,
+  ...ADDITIONAL_STUDENTS,
+};
+const ALL_STUDENTS = Object.entries(STUDENTS_BY_SECTION).flatMap(([section, students]) =>
+  students.map((student) => ({ ...student, section }))
+);
+
+function findStudentByRoll(rollNumber) {
+  const normalizedRoll = rollNumber.trim().toUpperCase();
+  return ALL_STUDENTS.find((student) => student.roll.trim().toUpperCase() === normalizedRoll);
+}
+
+function normalizeCourseName(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+const COURSE_NAME_ALIASES = new Map([
+  ["Business Intelligence & Analytics", ["Business Intelligence and Analytics"]],
+  ["Cyber Security and Privacy", ["Cyber Security & Privacy", "Cybersecurity and Privacy"]],
+  ["Database Management System", ["Data Base Management System"]],
+  ["Design & Implementation of Human-Computer Interfaces", [
+    "Design and Implementation of Human Computer Interfaces",
+    "Design and Implementation of Human and Computer Interface",
+  ]],
+  ["Fundamentals of Object Oriented Programming", []],
+  ["Introduction to Internet of Things", ["Internet of Things", "IoT"]],
+  ["Introduction to Large Language Models (LLMs)", [
+    "Introduction to Large Language Models",
+    "Introduction to LLMs",
+    "Large Language Models",
+  ]],
+  ["Introduction to Quantum Computing: Quantum Algorithms and Qiskit", [
+    "Introduction to Quantum Computing: Quantum Algorithm and Qiskit",
+    "Quantum Computing with Qiskit",
+  ]],
+  ["Programming in Java", ["Java", "Programing in Java", "Programmng in Java"]],
+  ["Programming in Modern C++", ["C++", "Modern C++", "Programmin in Modern C++"]],
+  ["Programming Data Structures and Algorithms Using Python", [
+    "Programming, Data Structures and Algorithms Using Python",
+  ]],
+  ["Social Networks", ["Social Networking"]],
+  ["The Joy of Computing using Python", [
+    "Joy of Computing using Python",
+    "The Joy of Computing Python",
+    "The Joy of Computing with Python",
+    "The Joy of Computimg using Python",
+  ]],
+]);
+
+const CANONICAL_COURSE_NAMES = new Map();
+for (const [canonicalName, aliases] of COURSE_NAME_ALIASES) {
+  for (const name of [canonicalName, ...aliases]) {
+    CANONICAL_COURSE_NAMES.set(normalizeCourseName(name), canonicalName);
+  }
+}
+
+function canonicalCourseName(name) {
+  const trimmed = name.trim().replace(/\s+/g, " ");
+  const canonical = CANONICAL_COURSE_NAMES.get(normalizeCourseName(trimmed));
+  if (canonical) return canonical;
+
+  return trimmed.toLowerCase().replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
+    .replace(/\bai\b/gi, "AI")
+    .replace(/\bar\/vr\b/gi, "AR/VR");
+}
 
 /* -------------------------------------------------------
    Excluded / Faded Courses
    ------------------------------------------------------- */
-const EXCLUDED_PATTERNS = [
-  "programming in java",
-  "joy of computing",
-  "the joy of computing",
-];
-
 function isExcludedCourse(name) {
   if (!name || !name.trim()) return false;
-  const lower = name.toLowerCase().trim();
-  return EXCLUDED_PATTERNS.some((p) => lower.includes(p));
+  const normalized = name.toLowerCase().replace(/[^a-z]/g, "");
+  const isJoyOfComputing = normalized.includes("joy") && normalized.includes("comput");
+  const isProgrammingInJava = normalized.includes("java") && /progra+m+i?ng/.test(normalized);
+  return isJoyOfComputing || isProgrammingInJava;
 }
 
 /* -------------------------------------------------------
@@ -147,10 +208,11 @@ const supabase = {
     return res.json();
   },
 
-  async hasSubmitted(rollNumber) {
+  async hasSubmitted(rollNumber, section) {
     const url = new URL(`/rest/v1/${CONFIG.SUPABASE_TABLE}`, CONFIG.SUPABASE_URL);
     url.searchParams.set("select", "roll_number");
     url.searchParams.set("roll_number", `ilike.${rollNumber}`);
+    url.searchParams.set("section", `eq.${section}`);
     url.searchParams.set("limit", "1");
     const res = await fetch(url, { headers: this.headers() });
     if (!res.ok) throw new Error(`Supabase submission check ${res.status}`);
@@ -220,12 +282,10 @@ function handleRollInput() {
     resetForm();
     if (!typed) return;
 
-    const student = STUDENTS.find(
-      (s) => s.roll.toLowerCase() === typed.toLowerCase()
-    );
+    const student = findStudentByRoll(typed);
 
     if (!student) {
-      rollError.textContent = "Roll number not found in CSE-A records.";
+      rollError.textContent = "Roll number not found in CSE records.";
       return;
     }
 
@@ -242,7 +302,7 @@ async function checkSubmissionStatus(student) {
   updateSubmitState();
 
   try {
-    const alreadySubmitted = await supabase.hasSubmitted(rollNumber);
+    const alreadySubmitted = await supabase.hasSubmitted(rollNumber, student.section);
     if (rollInput.value.trim().toUpperCase() !== rollNumber) return;
 
     submissionCheckState = alreadySubmitted ? "submitted" : "clear";
@@ -268,7 +328,10 @@ function loadStudent(student) {
   courseExclusionNote.hidden = false;
 
   if (student.course41 && student.course41.trim()) {
-    course41Name.textContent = student.course41;
+    course41Name.textContent = student.course41
+      .split(/\s*,\s*/)
+      .map(canonicalCourseName)
+      .join(", ");
     course41Banner.style.display = "flex";
   }
 
@@ -293,7 +356,8 @@ function loadStudent(student) {
 function renderCourses(courses) {
   coursesGrid.innerHTML = "";
   courses.forEach((course, idx) => {
-    const faded = isExcludedCourse(course);
+    const displayCourse = canonicalCourseName(course);
+    const faded = isExcludedCourse(displayCourse);
     const label = document.createElement("label");
     label.className = "course-item" + (faded ? " course-faded" : "");
     label.htmlFor = `course_${idx}`;
@@ -301,10 +365,10 @@ function renderCourses(courses) {
     const cb = document.createElement("input");
     cb.type = "checkbox";
     cb.id = `course_${idx}`;
-    cb.value = course;
+    cb.value = displayCourse;
     cb.disabled = faded;
     cb.classList.toggle("course-excluded", faded);
-    cb.setAttribute("aria-label", course);
+    cb.setAttribute("aria-label", displayCourse);
 
     if (!faded) {
       cb.addEventListener("change", () => {
@@ -317,7 +381,7 @@ function renderCourses(courses) {
 
     const span = document.createElement("span");
     span.className = "course-label";
-    span.textContent = course;
+    span.textContent = displayCourse;
 
     label.appendChild(cb);
     label.appendChild(span);
@@ -352,8 +416,7 @@ function updateConfirmedField() {
 }
 
 function updateSubmitState() {
-  const typedRoll  = rollInput.value.trim().toLowerCase();
-  const hasStudent = STUDENTS.some((student) => student.roll.toLowerCase() === typedRoll);
+  const hasStudent = Boolean(findStudentByRoll(rollInput.value));
   const hasChecked = coursesGrid.querySelectorAll("input:checked").length > 0;
   const allDisabled = [...coursesGrid.querySelectorAll("input[type=checkbox]")].every((cb) => cb.disabled);
   const noCBs = coursesGrid.querySelectorAll("input[type=checkbox]").length === 0;
@@ -390,10 +453,10 @@ async function handleSubmit(e) {
   hideStatus();
 
   const typed = rollInput.value.trim();
-  const student = STUDENTS.find((s) => s.roll.toLowerCase() === typed.toLowerCase());
+  const student = findStudentByRoll(typed);
 
   if (!student) {
-    showStatus("Roll number not found in CSE-A records.", "error");
+    showStatus("Roll number not found in CSE records.", "error");
     return;
   }
 
@@ -413,7 +476,7 @@ async function handleSubmit(e) {
   const payload = {
     roll_number: student.roll.toUpperCase(),
     student_name: student.name,
-    section: "CSE-A",
+    section: student.section,
     confirmed_courses: selectedCourses.join(", "),
     course_41: student.course41 || "",
     submitted_at: new Date().toISOString(),

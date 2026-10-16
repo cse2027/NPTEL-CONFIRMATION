@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NPTEL Course Confirmation – IV CSE-A</title>
-  <meta name="description" content="NPTEL course confirmation form for IV CSE-A students." />
+  <title>NPTEL Course Confirmation – IV CSE</title>
+  <meta name="description" content="NPTEL course confirmation form for IV CSE students." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -17,8 +17,8 @@
     <div class="header-inner">
       <div class="logo-area">
         <div>
-          <div class="logo-title">NPTEL Confirmation </div>
-          <div class="logo-sub"> CSE-A </div>
+          <div class="logo-title">NPTEL Confirmation Portal</div>
+          <div class="logo-sub"> IV CSE </div>
           <a class="admin-link" href="admin.html">Admin portal</a>
         </div>
       </div>
@@ -76,7 +76,7 @@
           <label class="field-label"> Select <b>NPTEL Courses</b> with Highest Percentage</label>
           <div class="courses-grid" id="coursesGrid" role="group" aria-label="NPTEL courses"></div>
           <div class="no-courses-msg" id="noCoursesMsg" style="display:none;">
-            No NPTEL courses found for this roll number.
+            No courses opted
           </div>
         </div>
 
@@ -123,6 +123,7 @@
 
   <!-- Load config FIRST (acts as .env) -->
   <script src="config.js"></script>
+  <script src="student-data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
