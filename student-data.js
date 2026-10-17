@@ -117,7 +117,7 @@ const ADDITIONAL_STUDENTS = {
     {"roll":"23BQ1A05H7","name":"Perungulam Kanaka Laya Sadhana","courses":["Programming in Java","Introduction to LLMS"],"course41":""},
     {"roll":"23bq1a05h8","name":"petetivamsikrishna","courses":[],"course41":"Software testing"},
     {"roll":"23BQ1A05H9","name":"Rishaswi Podila","courses":["Social Networks"],"course41":""},
-    {"roll":"23BQ1A05I0","name":"Pokala Madhu Venkataprasad","courses":["Programming in java","Cyber Security And Privacy","-"],"course41":""},
+    {"roll":"23BQ1A05I0","name":"Pokala Madhu Venkataprasad","courses":["Programming in java","Cyber Security And Privacy"],"course41":""},
     {"roll":"23bq1a05i1","name":"Potla Venkata Vinay","courses":["Cyber security and privacy"],"course41":""},
     {"roll":"23BQ1A05I2","name":"PRAGNA.PAPASANI","courses":["PROGRAMMING IN JAVA"],"course41":"software testing, cyber security basics, distributed systems"},
     {"roll":"23bq1a05i3","name":"Prem Chand Janga","courses":["CYBER SECURITY AND PRIVACY"],"course41":""},
